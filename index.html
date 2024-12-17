@@ -3,95 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Special Proposal</title>
+    <title>My Proposal Page</title>
     <style>
         body {
-            font-family: 'Comic Sans MS', cursive;
+            font-family: Arial, sans-serif;
+            background-color: #fff0f5;
+            color: #444;
             text-align: center;
-            background-color: #fce4ec;
-            margin: 0;
-            padding: 0;
+            padding: 50px;
         }
         h1 {
-            color: #d81b60;
-        }
-        h2 {
-            color: #333;
-        }
-        .question-box {
-            background-color: #ffffff;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 50px auto;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
+            color: #ff1493;
         }
         button {
-            background-color: #ff4081;
+            background-color: #ff69b4;
             color: white;
-            font-size: 16px;
             border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            margin: 10px;
+            padding: 15px 25px;
+            font-size: 18px;
             cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #ff1493;
         }
     </style>
-</head>
-<body>
-    <h1>Will you give me a chance to love you as a boyfriend?</h1>
-    <div class="question-box" id="questionBox">
-        <h2 id="questionText">Will you give me a chance to love you as a boyfriend?</h2>
-        <button onclick="submitResponse('Yes')">Yes</button>
-        <button onclick="nextQuestion()">No</button>
-    </div>
     <script>
-        const questions = [
-            "Do you really not want a person like me to be your boyfriend?",
-            "You know I’ll be very sad and probably have a bad day/month/year all because of you! Please say yes!!"
-        ];
-        let currentQuestion = 0;
+        async function recordResponse(response) {
+            const url = "https://script.google.com/macros/s/AKfycby37RyzNCfFcl0-NCly2i3wRf2Fu-u_zwe_hY3xYWbEweye67WVMbTjfbC9LLl3XsIlSg/exec"; // Replace with your Web App URL
 
-        function nextQuestion() {
-            currentQuestion++;
-            if (currentQuestion < questions.length) {
-                document.getElementById("questionText").innerText = questions[currentQuestion];
-            } else {
-                showFinalMessage("Sorry, I thought I meant something to you!!");
-                submitResponse("No");
+            try {
+                const result = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `response=${response}`
+                });
+                const text = await result.text();
+                alert(text); // Show success message to the user
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to record response. Please try again.");
             }
         }
-
-        function showFinalMessage(message) {
-            document.getElementById("questionBox").innerHTML = `<h2>${message}</h2>`;
-        }
-
-        function submitResponse(response) {
-            const token = "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"; // Replace with your PAT
-            const repo = "aarushxd001/Testing001"; // Replace with your username and repository name
-            const issueTitle = "Response to Proposal Page";
-            const issueBody = `User responded with: ${response}`;
-
-            fetch(`https://api.github.com/repos/${repo}/issues`, {
-                method: "POST",
-                headers: {
-                    "Authorization": `token ${token}`,
-                    "Accept": "application/vnd.github.v3+json",
-                },
-                body: JSON.stringify({
-                    title: issueTitle,
-                    body: issueBody,
-                }),
-            })
-            .then(response => {
-                if (response.ok) {
-                    showFinalMessage("Yayy!! You literally made me the happiest person of the day!!");
-                } else {
-                    alert("Failed to record response. Please try again later.");
-                }
-            })
-            .catch(err => console.error(err));
-        }
     </script>
+</head>
+<body>
+    <h1>Will you give me a chance to love you as a boyfriend???</h1>
+    <button onclick="recordResponse('Yes')">Yes</button>
+    <button onclick="recordResponse('No')">No</button>
 </body>
 </html>
