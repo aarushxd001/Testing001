@@ -30,17 +30,53 @@
         }
     </style>
     <script>
-        async function recordResponse(response) {
-            const url = "https://script.google.com/macros/s/AKfycby37RyzNCfFcl0-NCly2i3wRf2Fu-u_zwe_hY3xYWbEweye67WVMbTjfbC9LLl3XsIlSg/exec"; // Replace with your Web App URL
+        let step = 1; // Track the step of the conversation
 
+        // Function to handle the response and move to the next step
+        async function handleResponse(response) {
+            let message = "";
+            let url = "https://script.google.com/macros/s/AKfycby37RyzNCfFcl0-NCly2i3wRf2Fu-u_zwe_hY3xYWbEweye67WVMbTjfbC9LLl3XsIlSg/exec"; // Replace with your Web App URL
+
+            if (step === 1) {
+                if (response === 'Yes') {
+                    message = "Yayy!! You literally made me the happiest person of the day!!";
+                    recordResponse(message);
+                } else {
+                    step = 2;
+                    message = "Do you really not want someone like me as your boyfriend?";
+                }
+            } else if (step === 2) {
+                if (response === 'Yes') {
+                    message = "Yayy!! You literally made me the happiest person of the day!!";
+                    recordResponse(message);
+                } else {
+                    step = 3;
+                    message = "U know that I will be very sad and probably have a bad day/month/year all because of you !! Please say yes!!";
+                }
+            } else if (step === 3) {
+                if (response === 'Yes') {
+                    message = "Yayy!! You made my whole day!!";
+                    recordResponse(message);
+                } else {
+                    message = "Sorry, I thought I meant something to you!!";
+                    recordResponse(message);
+                }
+            }
+            
+            document.getElementById("question").innerText = message;
+        }
+
+        // Function to record the response in Google Sheets
+        async function recordResponse(message) {
+            const url = "YOUR_WEB_APP_URL"; // Replace with your Web App URL
             try {
                 const result = await fetch(url, {
                     method: "POST",
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: `response=${response}`
+                    body: `response=${message}`
                 });
                 const text = await result.text();
-                alert(text); // Show success message to the user
+                alert(text); // Success message
             } catch (error) {
                 console.error("Error:", error);
                 alert("Failed to record response. Please try again.");
@@ -50,7 +86,8 @@
 </head>
 <body>
     <h1>Will you give me a chance to love you as a boyfriend???</h1>
-    <button onclick="recordResponse('Yes')">Yes</button>
-    <button onclick="recordResponse('No')">No</button>
+    <div id="question">Will you give me a chance to love you as a boyfriend?</div>
+    <button onclick="handleResponse('Yes')">Yes</button>
+    <button onclick="handleResponse('No')">No</button>
 </body>
 </html>
